@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}カレンダー管理{% endblock %}
+
+{% block content %}
+<h1>カレンダー管理</h1>
+
+<div class="form-wrapper2">
+    <div class="row">
+        <label for="honsyuku-input" class="col-form-label col">宿曜文字入力</label>
+        <input type="text" id="honsyuku-input" class="form-control col">
+        <label for="months-num" class="col-form-label col">予定を書き込む月数</label>
+        <input type="text" id="months-num" class="form-control col">
+    </div>
+</div>
+
+<button id="show-events" class="btn btn-warning mybutton" >カレンダーを表示</button>
+<button id="create-events" class="btn btn-warning mybutton" >宿曜運勢をカレンダーに書込み</button>
+<button id="delete-events" class="btn btn-warning mybutton" >カレンダーの予定を削除</button>
+
+<div id="calendar-result" class="result"></div>
+<div id="honsyuku-text" class="result"></div>
+
+<div id="google-calendar">
+    <!-- <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTokyo&src=ZWxxNTM2OHNsZ3FkN2Z1ZGhwMzEwNm5yODhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23EF6C00" style="border:solid 1px #777" width="600" height="600" frameborder="0" scrolling="no"></iframe> -->
+</div>
+
+<div id="spinner-div" class="pt-5">
+    <div class="spinner-border text-primary" role="status">
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+{% endblock %}

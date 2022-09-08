@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}占い{% endblock %}
+
+{% block content %}
+<h1>占い</h1>
+<p>生年月日を入力してください</p>
+
+<div class="form-wrapper">
+    <div class="form-group row">
+        <select id="birth-year" class="form-control col">
+        </select>
+        <span class="col w5">/</span>
+        <select id="birth-month" class="form-control col">
+        </select>
+        <span class="col w5">/</span>
+        <select id="birth-day" class="form-control col">
+        </select> 
+    </div>
+</div>
+
+<button id="get_honsyuku" class="btn btn-primary mybutton" >宿曜占い</button>
+<button id="get_doubutsu" class="btn btn-success mybutton" >動物占い</button>
+<button id="get_honsyuku_doubutsu" class="btn btn-info mybutton" >宿曜占い＆動物占い</button>
+
+<div id="fortune-result" class="result"></div>
+
+<div id="google-calendar">
+    <!-- <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTokyo&src=ZWxxNTM2OHNsZ3FkN2Z1ZGhwMzEwNm5yODhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23EF6C00" style="border:solid 1px #777" width="600" height="600" frameborder="0" scrolling="no"></iframe> -->
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
