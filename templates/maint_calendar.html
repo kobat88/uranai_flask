@@ -6,19 +6,34 @@
 
 <div class="form-wrapper2">
     <div class="row">
-        <label for="honsyuku-input" class="col-form-label col">宿曜文字入力</label>
-        <input type="text" id="honsyuku-input" class="form-control col">
-        <label for="months-num" class="col-form-label col">予定を書き込む月数</label>
-        <input type="text" id="months-num" class="form-control col">
+        <label for="honsyuku-select" class="col-form-label col">本命宿</label>
+        <select id="honsyuku-select" class="form-control col">
+        </select>
     </div>
+</div>
+
+<div class="form-wrapper3">
+    <fieldset class="form-group row">
+        <legend class="col-form-label col">予定作成/削除期間</legend>
+        <select id="year-from" class="form-control col">
+        </select>
+        <span class="col w5">/</span>
+        <select id="month-from" class="form-control col">
+        </select>
+        <span class="col w5">～</span>
+        <select id="year-to" class="form-control col">
+        </select>
+        <span class="col w5">/</span>
+        <select id="month-to" class="form-control col">
+        </select>
+    </fieldset>
 </div>
 
 <button id="show-events" class="btn btn-warning mybutton" >カレンダーを表示</button>
 <button id="create-events" class="btn btn-warning mybutton" >宿曜運勢をカレンダーに書込み</button>
 <button id="delete-events" class="btn btn-warning mybutton" >カレンダーの予定を削除</button>
 
-<div id="calendar-result" class="result"></div>
-<div id="honsyuku-text" class="result"></div>
+<div id="result" class="result"></div>
 
 <div id="google-calendar">
     <!-- <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTokyo&src=ZWxxNTM2OHNsZ3FkN2Z1ZGhwMzEwNm5yODhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23EF6C00" style="border:solid 1px #777" width="600" height="600" frameborder="0" scrolling="no"></iframe> -->

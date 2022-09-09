@@ -1,9 +1,9 @@
-import datetime
+from datetime import datetime
 
 class DoubutsuUranai(object):
     
-    #動物リスト（https://netwadai.com/blog/post-6289 より）
-    __db_list = [
+    #動物リスト https://netwadai.com/blog/post-6289 より
+    db_list = [
             "1.イエローのチーター","2.グリーンのタヌキ","3.レッドのサル","4.オレンジのコアラ","5.ブラウンのクロヒョウ","6.ブラックのトラ","7.ゴールドのチーター","8.シルバーのタヌキ","9.ブルーのサル","10.パープルのコアラ",
             "11.イエローのコジカ","12.グリーンのゾウ","13.レッドのオオカミ","14.オレンジのヒツジ","15.ブラウンのサル","16.ブラックのコアラ","17.ゴールドのコジカ","18.シルバーのゾウ","19.ブルーのオオカミ","20.パープルのヒツジ",
             "21.イエローのペガサス","22.グリーンのヒツジ","23.レッドのヒツジ","24.オレンジのオオカミ","25.ブラウンのオオカミ","26.ブラックのヒツジ","27.ゴールドのペガサス","28.シルバーのペガサス","29.ブルーのヒツジ","30.パープルのオオカミ",
@@ -15,22 +15,23 @@ class DoubutsuUranai(object):
     def __init__(self):
         pass
     
+    #生年月日から色付き動物を求める
     def get_doubutsu(self,birthy,birthm,birthd):
         """
         Args:
-            birthy(int): 誕生日の年
-            birthm(int): 誕生日の月
-            birthd(int): 誕生日の日
+            birthy(int): 誕生年
+            birthm(int): 誕生月
+            birthd(int): 誕生日
         Returns:
-            string: 誕生日から求めた動物名
+            doubutsu(str): 色付き動物名
         """
 
         #1921/1/1を「1」とし、その日から自分の誕生日までの経過日数を60で割った余りが動物ナンバー
-        dt_org = datetime.datetime(year=1921,month=1,day=1)
-        dt_birth = datetime.datetime(year=birthy,month=birthm,day=birthd)
+        dt_org = datetime(year=1921,month=1,day=1)
+        dt_birth = datetime(year=birthy,month=birthm,day=birthd)
         db_num = ((dt_birth - dt_org).days) % 60
         
-        doubutsu = self.__db_list[db_num]
+        doubutsu = self.db_list[db_num]
         return doubutsu
 
 

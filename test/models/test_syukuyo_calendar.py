@@ -1,13 +1,13 @@
 import unittest
 from unittest import mock
+from models.syukuyo_calendar import SyukuyoCalendar
 from models.g_calendar import GCalendar
-from models.syukuyo import Syukuyo
 
-class GCalendarTest(unittest.TestCase):
+class SyukuyoCalendarTest(unittest.TestCase):
 
     #各テストメソッド実行前に呼ばれる
     def setUp(self):
-        self.cal = GCalendar()
+        self.cal = SyukuyoCalendar()
     
     #各テストメソッド実行後に呼ばれる
     def tearDown(self):
@@ -16,11 +16,8 @@ class GCalendarTest(unittest.TestCase):
     @mock.patch('models.g_calendar.GCalendar.gapi_events_insert')
     def test_create_events_gapi_http_error(self,mock):
         mock.return_value = ''
-        #本来はSyukuyoもmockにすべき？だが、ft_listを手作りするのが面倒なためUnittest済の実物を呼ぶ
-        syukuyo = Syukuyo()
-        ft_list = syukuyo.get_fortune('尾',1)
         
-        self.assertEqual(self.cal.create_events(ft_list,'尾'),"GAPI HTTP error")
+        self.assertEqual(self.cal.create_events("尾",2022,9,2022,9),"GAPI HTTP Error")
 
     @mock.patch('models.g_calendar.GCalendar.gapi_events_insert')
     def test_create_events_gapi_error(self,mock):
@@ -39,12 +36,9 @@ class GCalendarTest(unittest.TestCase):
                 "message": "The specified time range is empty."
             }
         }
-        syukuyo = Syukuyo()
-        ft_list = syukuyo.get_fortune('尾',1)
 
-        self.assertEqual(self.cal.create_events(ft_list,'尾'),"idx:0 gapi_error_code:400 gapi_error_msg:The specified time range is empty.")
+        self.assertEqual(self.cal.create_events("尾",2022,9,2022,9),"idx:0 gapi_error_code:400 gapi_error_msg:The specified time range is empty.")
     
-
 
 if __name__ == '__main__':
     unittest.main()

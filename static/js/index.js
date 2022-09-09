@@ -38,7 +38,7 @@ console.log({birthDay});
 let dt = new Date();
 
 //年の生成
-for(let i=1920; i<=dt.getFullYear(); i++){
+for(let i=1900; i<=dt.getFullYear(); i++){
     createOptionForElements(birthYear,i);
 }
 
@@ -60,27 +60,14 @@ birthMonth.addEventListener('change',function(){
     changeDays();
 });
 
-//本宿ごとのGoogleカレンダー埋め込みタグリスト
+//本命宿ごとのGoogleカレンダー埋め込みタグ
 const CALENDAR_TAGS = {
-    '尾':'<iframe src=\"https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTokyo&src=ZWxxNTM2OHNsZ3FkN2Z1ZGhwMzEwNm5yODhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23EF6C00\" style=\"border:solid 1px #777\" width=\"600\" height=\"600\" frameborder=\"0\" scrolling=\"no\"></iframe>'
+    "尾":'<iframe src=\"https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTokyo&src=ZWxxNTM2OHNsZ3FkN2Z1ZGhwMzEwNm5yODhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23EF6C00\" style=\"border:solid 1px #777\" width=\"600\" height=\"600\" frameborder=\"0\" scrolling=\"no\"></iframe>'
 }
 
-/** getJSON
-$(function(){
-    $('#get_honsyuku').bind('click', function(){
-        $.getJSON('/get_honsyuku', {
-            birth_year: $('#birth-year').val(),
-            birth_month: $('#birth-month').val(),
-            birth_day: $('#birth-day').val()
-        }, function(data){
-            $("#result").text(data.result)
-        });
-    });
-}); 
-*/
 /** 宿曜占い */
 $(function(){
-    $('#get_honsyuku').bind('click', function(){
+    $('#get-honsyuku').bind('click', function(){
         $.ajax({
             type: 'POST',
             url: '/get_honsyuku',
@@ -91,22 +78,21 @@ $(function(){
             },
             dataType : "json"
         }).done(function(data){
-            let msg  = '<div>あなたの本宿は<span class=\'honsyuku\'>' + data.result + '宿</span>です</div>';
-            $("#fortune-result").html(msg);
-            //本宿に応じたカレンダーを取得する
-            calendar_tag = CALENDAR_TAGS['尾'];
+            let msg  = "あなたの本命宿は<span class=\'honsyuku\'>" + data.result + "宿</span>です";
+            $("#result").html(msg);
+            //本命宿に応じたカレンダーを表示する
+            calendar_tag = CALENDAR_TAGS["尾"];
             $("#google-calendar").html(calendar_tag);
         }).fail(function(jqXHR,textStatus,errorThrown){
-            //let msg = '<p>status:' + jqXHR.stauts + ',' + textStatus + ',' + errorThrown.message + '</p>';
-            let msg = 'status=' + jqXHR.status + jqXHR.responseText;
-            $("#fortune-result").html(msg);
+            let msg = `status=${jqXHR.status}, responseText=${jqXHR.responseText}, textStatus=${textStatus}, errorThrown=${errorThrown.message}`;
+            $("#result").html(msg);
         });
     });
 });
 
 /** 動物占い */
 $(function(){
-    $('#get_doubutsu').bind('click', function(){
+    $('#get-doubutsu').bind('click', function(){
         $.ajax({
             type: 'POST',
             url: '/get_doubutsu',
@@ -117,19 +103,20 @@ $(function(){
             },
             dataType : "json"
         }).done(function(data){
-            let msg  = '<div>あなたの動物は<span class=\'doubutsu\'>' + data.result + '</span>です</div>';
-            $("#fortune-result").html(msg);
+            let msg  = "あなたの動物は<span class=\'doubutsu\'>" + data.result + "</span>です";
+            $("#result").html(msg);
+            //宿曜運勢カレンダーは非表示
             $("#google-calendar").html("");
         }).fail(function(jqXHR,textStatus,errorThrown){
-            let msg = 'status=' + jqXHR.status + jqXHR.responseText;
-            $("#fortune-result").html(msg);
+            let msg = `status=${jqXHR.status}, responseText=${jqXHR.responseText}, textStatus=${textStatus}, errorThrown=${errorThrown.message}`;
+            $("#result").html(msg);
         });
     });
 });
 
 /** 宿曜＆動物占い */
 $(function(){
-    $('#get_honsyuku_doubutsu').bind('click', function(){
+    $('#get-honsyuku-doubutsu').bind('click', function(){
         $.ajax({
             type: 'POST',
             url: '/get_honsyuku_doubutsu',
@@ -140,15 +127,15 @@ $(function(){
             },
             dataType : "json"
         }).done(function(data){
-            let msg_honsyuku  = '<div>あなたの本宿は<span class=\'honsyuku\'>' + data.result_honsyuku + '宿</span>です</div>';
-            let msg_doubutsu  = '<div>あなたの動物は<span class=\'doubutsu\'>' + data.result_doubutsu + '</span>です</div>';
-            $("#fortune-result").html(msg_honsyuku + msg_doubutsu);
-            //本宿に応じたカレンダーを取得する
-            calendar_tag = CALENDAR_TAGS['尾'];
+            let msg_honsyuku  = "<div>あなたの本命宿は<span class=\'honsyuku\'>" + data.result_honsyuku + "宿</span>です</div>";
+            let msg_doubutsu  = "<div>あなたの動物は<span class=\'doubutsu\'>" + data.result_doubutsu + "</span>です</div>";
+            $("#result").html(msg_honsyuku + msg_doubutsu);
+            //本命宿に応じたカレンダーを取得する
+            calendar_tag = CALENDAR_TAGS["尾"];
             $("#google-calendar").html(calendar_tag);
         }).fail(function(jqXHR,textStatus,errorThrown){
-            let msg = 'status=' + jqXHR.status + jqXHR.responseText;
-            $("#fortune-result").html(msg);
+            let msg = `status=${jqXHR.status}, responseText=${jqXHR.responseText}, textStatus=${textStatus}, errorThrown=${errorThrown.message}`;
+            $("#result").html(msg);
         });
     });
 });
