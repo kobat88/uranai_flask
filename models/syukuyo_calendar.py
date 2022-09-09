@@ -17,50 +17,61 @@ class SyukuyoCalendar(object):
     #本命宿ごとのGoogleカレンダーに宿曜運勢を予定として書き込む
     def create_events(self,honsyuku,y_from,m_from,y_to,m_to):
 
-        #本命宿から指定された期間の運勢リストを取得
-        syukuyo = Syukuyo()
-        ft_list = syukuyo.get_fortune(honsyuku,y_from,m_from,y_to,m_to)
+        #運勢を求める期間の開始年月の月初日
+        dt_from = date(y_from, m_from, 1)
+        #運勢を求める期間の開始年月の月末日
+        dt_to = date(y_to,m_to,1) + relativedelta(months=1) - timedelta(days=1)
+        #運勢を求める期間の日数
+        dt_days_count = (dt_to - dt_from).days + 1
 
-        #本命宿に応じたカレンダーIDを取得
-        #calendar_id = self.CALENDAR_IDS[honsyuku]
-        calendar_id = self.CALENDAR_IDS['尾']
+        if dt_days_count > 366:
+            resp = "期間指定は1年以内にしてください"
+        
+        else:
+            #本命宿から指定された期間の運勢リストを取得
+            syukuyo = Syukuyo()
+            ft_list = syukuyo.get_fortune(honsyuku,y_from,m_from,y_to,m_to)
 
-        gcal = GCalendar()
+            #本命宿に応じたカレンダーIDを取得
+            #calendar_id = self.CALENDAR_IDS[honsyuku]
+            calendar_id = self.CALENDAR_IDS['尾']
 
-        for i in range(len(ft_list)):
-            plan = {
-                'summary' : list(ft_list[i].values())[0],
-                'start' : {
-                    #Googleカレンダーは日時をISOフォーマットで受け取る
-                    'date' : list(ft_list[i].keys())[0].isoformat(),
-                    #timeZoneはユーザーカレンダー側に設定してあればそちらを見る
-                    #'timeZone' : 'Japan'   
-                },
-                'end':{
-                    'date' : list(ft_list[i].keys())[0].isoformat(),
-                    #'timeZone' : 'Japan'
-                },
-                'allDayEvent' : True,
-                'singleEvents' : True,
-                'colorId' : 5     
-            }
-            #event = self.service.events().insert(calendarId=calendar_id,body=plan).execute()
-            event = gcal.gapi_events_insert(calendar_id,plan)
+            gcal = GCalendar()
 
-            #gapiのレスポンスボディが空でない場合
-            if event:
-                #レスポンスボディにerror情報がある場合
-                if list(event.keys())[0] == 'error':
-                    gapi_error_code = event['error']['code']
-                    gapi_error_msg = event['error']['message']
-                    resp = 'idx:{} gapi_error_code:{} gapi_error_msg:{}'.format(i,gapi_error_code,gapi_error_msg)
+            for i in range(len(ft_list)):
+                plan = {
+                    'summary' : list(ft_list[i].values())[0],
+                    'start' : {
+                        #Googleカレンダーは日時をISOフォーマットで受け取る
+                        'date' : list(ft_list[i].keys())[0].isoformat(),
+                        #timeZoneはユーザーカレンダー側に設定してあればそちらを見る
+                        #'timeZone' : 'Japan'   
+                    },
+                    'end':{
+                        'date' : list(ft_list[i].keys())[0].isoformat(),
+                        #'timeZone' : 'Japan'
+                    },
+                    'allDayEvent' : True,
+                    'singleEvents' : True,
+                    'colorId' : 5     
+                }
+                #event = self.service.events().insert(calendarId=calendar_id,body=plan).execute()
+                event = gcal.gapi_events_insert(calendar_id,plan)
+
+                #gapiのレスポンスボディが空でない場合
+                if event:
+                    #レスポンスボディにerror情報がある場合
+                    if list(event.keys())[0] == 'error':
+                        gapi_error_code = event['error']['code']
+                        gapi_error_msg = event['error']['message']
+                        resp = 'idx:{} gapi_error_code:{} gapi_error_msg:{}'.format(i,gapi_error_code,gapi_error_msg)
+                        break
+                    #レスポンスボディにerror情報が無い場合
+                    resp = "Googleカレンダーに運勢を書き込みました"
+                #gapiのレスポンスボディが空の場合（HTTPエラー）
+                else:
+                    resp = "GAPI HTTP Error"
                     break
-                #レスポンスボディにerror情報が無い場合
-                resp = "Googleカレンダーに運勢を書き込みました"
-            #gapiのレスポンスボディが空の場合（HTTPエラー）
-            else:
-                resp = "GAPI HTTP Error"
-                break
 
         return resp
 
